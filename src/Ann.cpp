@@ -29,13 +29,16 @@ void ANN::trainAnn (const char* filename, int maxEpochs, const float desiredErro
 	//read file
 	std::ifstream file;
 	std::string line;
-	double error = 1;
 	int epochs = 1;
+	int numElemInfile = 0;
 
 	file.open (filename);
 
+	//mse - Mean Square Error
+	std::vector<double> mse(layers.back().size(), 0.0);
+
 	if (file.is_open())
-		while (/*fabs(error) > desiredError && */epochs <= maxEpochs) {
+		while (epochs <= maxEpochs) {
 			if (file.good()) {
 				getline (file, line);
 				std::vector<double> lineInput;
@@ -73,22 +76,29 @@ void ANN::trainAnn (const char* filename, int maxEpochs, const float desiredErro
 
 						//calcular erro e atualizar os pesos
 						std::vector<double> verror (annOutput.size(), 0.0);
-						for (int i = 0; i < annOutput.size(); i++)
-							verror[i] = lineOutput[i] - annOutput[i];
-
-						double sum = 0.0;
-						for (double partialError : verror)
-							sum += partialError;
-						error = sum / double(verror.size());
+						for (int i = 0; i < annOutput.size(); i++) {
+						  verror[i] = pow(lineOutput[i] - annOutput[i], 2);
+							mse[i] += verror[i];
+						}
 
 						updateNet(lineOutput);
-						//std::cout << error << " " << epochs <<  std::endl;
 					} else
 						std::cerr << "error: Number of input elements didn't match" << std::endl;
-
+					numElemInfile++;
 			} else {
 				if (file.eof())
 					file.seekg(0, std::ios::beg);
+					
+					double error = 0.0;
+					for (int i = 0; i < mse.size(); i++) {
+						error += mse[i] / numElemInfile;
+						mse[i] = 0.0;
+					}
+					error = error / mse.size();
+					numElemInfile = 0;
+					
+					if (fabs(error) < desiredError)
+						break;
 				}
 			epochs++;
 		}
