@@ -29,8 +29,8 @@ std::vector<double> Layer::getOutput() {
 
 std::vector<std::vector<double> > Layer::getLayerDownStream() {
 	std::vector<std::vector<double> > layerDownStream;
-	for (auto neurone : neurones) {
-		layerDownStream.push_back(neurone.getSigma());
+	for (int i = 0; i < neurones.size(); i++) {
+		layerDownStream.push_back(neurones[i].getSigma());
 	}
 	return layerDownStream;
 }
@@ -44,7 +44,7 @@ void Layer::updateWeights(const std::vector<double>& correctOutput, double learn
 
 void Layer::updateWeights(const std::vector<std::vector<double> >& downStream, double learningRate) {
 	for (int i = 0; i < neurones.size(); i++) {
-		std::vector<double> nextLayerStream;
+	  std::vector<double> nextLayerStream;
 		
 		for (int j = 0; j < downStream.size(); j++)
 			nextLayerStream.push_back (downStream[j][i]);

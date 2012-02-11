@@ -13,6 +13,7 @@ void Neurone::setInput (const std::vector<double>& _input) {
 			double num = ((double) rand() / double(RAND_MAX));
 			weights.push_back(num);			
 		}
+		bias = (double) rand() / double(RAND_MAX);
 	}
 }
 
@@ -21,7 +22,7 @@ double Neurone::output() {
 	sum = 0.0;
  	for (int i = 0; i < input.size(); i++)
 		sum += input[i] * weights[i];
- 	//sum += bias;
+ 	sum += bias;
 
  	//funcao sigmoid
  	_output = 1.0 / (1.0 + exp(-sum));
@@ -61,7 +62,9 @@ std::vector<double> Neurone::getSigma() {
 }
 
 void Neurone::updateWeights(double learningRate) {
+	//delta rule
 	for (int i = 0; i < weights.size(); i++) {
 		weights[i] += learningRate * sig * input[i];
 	}
+	bias += learningRate * sig;
 }
