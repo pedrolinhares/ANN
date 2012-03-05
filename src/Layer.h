@@ -2,6 +2,8 @@
 #define LAYER_H
 
 #include <vector>
+#include <string>
+#include <fstream>
 #include "Neurone.h"
 
 class Layer {
@@ -15,6 +17,8 @@ class Layer {
 		void updateWeights(const std::vector<double>& correctOutput, double learningRate);
 		void updateWeights(const std::vector<std::vector<double> >& downStream, double learningRate);
 		std::vector<double> getOutput();
+		std::string printWeights();
+		void updateWeightsFromFile(std::ifstream &file);
 
 	private:
 		std::vector<Neurone> neurones;

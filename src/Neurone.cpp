@@ -1,18 +1,21 @@
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>
+#include <sstream>
 #include "Neurone.h"
-
+#include <iostream>
 
 void Neurone::setInput (const std::vector<double>& _input) {
 	input = _input;
 
 	if (input.size() != weights.size()) {
+		srand (time(NULL));
 		weights.clear();
 		for (int i = 0; i < input.size(); i++) {		
 			double num = ((double) rand() / double(RAND_MAX));
 			weights.push_back(num);			
 		}
+
 		bias = (double) rand() / double(RAND_MAX);
 	}
 }
@@ -67,4 +70,23 @@ void Neurone::updateWeights(double learningRate) {
 		weights[i] += learningRate * sig * input[i];
 	}
 	bias += learningRate * sig;
+}
+
+std::string Neurone::printWeights() {
+	std::stringstream out;
+
+	for (int i = 0; i < weights.size(); i++) {
+		out << weights[i];
+		out << " ";	
+	}
+	out << bias;
+
+	return out.str();
+}
+
+void Neurone::setWeights(std::vector<double> _weights) {
+	for (int i = 0; i < _weights.size() - 1; i++)
+		weights.push_back(_weights[i]);
+	
+	bias = _weights.back();
 }

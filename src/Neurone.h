@@ -2,6 +2,7 @@
 #define NEURONE_H
 
 #include <vector>
+#include <string>
 
 class Neurone {
 	public:
@@ -12,6 +13,9 @@ class Neurone {
 		std::vector<double> calculateSigma(const std::vector<double> downStream, bool isDownStream);
 		std::vector<double> getSigma();
 		void updateWeights(double learningRate);
+		std::string printWeights();
+		void setWeights(std::vector<double> _weights);
+		
 	private:
 		double sum;
 		double _output;

@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include <iostream>
+#include <sstream>
 
 Layer::Layer(int numOfNeurones): hidden(true) {
 	for (int i = 0; i < numOfNeurones; i++)
@@ -50,5 +51,30 @@ void Layer::updateWeights(const std::vector<std::vector<double> >& downStream, d
 			nextLayerStream.push_back (downStream[j][i]);
 		neurones[i].calculateSigma(nextLayerStream, true);
 		neurones[i].updateWeights(learningRate);
+	}
+}
+
+std::string Layer::printWeights() {
+	std::stringstream out(std::stringstream::in | std::stringstream::out);
+	for (int i = 0; i < neurones.size(); i++) {
+		out << neurones[i].printWeights();
+		out << '\n';
+	}
+
+	return out.str();
+}
+
+void Layer::updateWeightsFromFile(std::ifstream &file) {
+	std::string line;
+
+	for (int i = 0; i < neurones.size(); i++) {
+		getline (file, line);
+		std::vector<double> lineInput;
+		std::stringstream stream (line);
+		std::string value;
+		
+		while (getline (stream, value, ' '))
+			lineInput.push_back (atof (value.c_str()));
+		neurones[i].setWeights(lineInput);
 	}
 }

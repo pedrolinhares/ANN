@@ -4,12 +4,16 @@
 #include "Ann.h"
 
 int main (void) {
- 	ANN ann (4, 6, 4, 3, 2);
+ 	ANN ann (3, 7, 5, 3);
 
 	//treinar
-	int max_epochs = 3000000;
+	int max_epochs = 50000;
 	const float desired_error = (const float) 0.001;
-	ann.trainAnn("data_sets/maos.txt", max_epochs, desired_error);
+	ann.trainAnn("data_sets/pos_maos.data", max_epochs, desired_error);
+	ann.saveToFile("rede.net");
+
+	//carregar rede neural a partir do arquivo salvo apos treinamento
+	//ann.readFromFile("rede.net");
 
 	//rodar exemplos
 

@@ -1,6 +1,4 @@
 #include <iostream>
-#include <fstream>
-#include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <cmath>
@@ -99,8 +97,8 @@ void ANN::trainAnn (const char* filename, int maxEpochs, const float desiredErro
 					
 					if (fabs(error) < desiredError)
 						break;
+				epochs++;
 				}
-			epochs++;
 		}
 	else
 		std::cout << "Unable to read file." << std::endl;
@@ -133,3 +131,26 @@ void ANN::updateNet(const std::vector<double> correctOutput) {
 		layers[i].updateWeights(layers[i + 1].getLayerDownStream(), learningRate);
 	}
 }
+
+void ANN::saveToFile(const char* filename) {
+	std::ofstream file;
+	file.open(filename);
+
+	if (file.is_open())
+		for (int i = 0; i < layers.size(); i++) {
+			file << layers[i].printWeights();
+		}
+
+		file.close();
+}
+
+void ANN::readFromFile(const char* filename) {
+	std::ifstream file(filename);
+	
+	if (file.is_open())
+			for (int i = 0; i < layers.size(); i++)
+				layers[i].updateWeightsFromFile(file);	
+	
+	file.close();
+}
+
