@@ -1,4 +1,6 @@
 *.o
 *~
 *.swp
+release/
+debug/
 ann
